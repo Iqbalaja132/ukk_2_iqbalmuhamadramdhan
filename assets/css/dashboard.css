@@ -1,0 +1,220 @@
+/* ====================
+    RESET & VARIABLE
+==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #4a90a4;
+  --primary-dark: #357a8c;
+  --bg-main: #f5f7fa;
+  --bg-card: #ffffff;
+  --bg-sidebar: #2c3e50;
+  --bg-sidebar-hover: #34495e;
+
+  --text-primary: #2c3e50;
+  --text-light: #ecf0f1;
+  --text-muted: #95a5a6;
+
+  --danger: #e74c3c;
+
+  --shadow-sm: 0 2px 4px rgba(0,0,0,.05);
+  --radius-sm: 8px; /* Diperhalus untuk menu */
+
+  --transition: all .3s ease;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ====================
+    SIDEBAR
+==================== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--bg-sidebar), #1a252f);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: transform .3s ease;
+}
+
+.sidebar.closed {
+  transform: translateX(-260px);
+}
+
+/* ====================
+    SIDEBAR CONTENT (REVISI JARAK MENU)
+==================== */
+.sidebar-header {
+  height: 60px; 
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-light);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 20px 15px; /* Memberi ruang lebih di dalam list menu */
+  flex: 1;
+  overflow-y: auto;
+  display: flex;         /* AKTIFKAN FLEX UNTUK JARAK VERTIKAL */
+  flex-direction: column;
+  gap: 12px;             /* JARAK ANTAR ITEM MENU (USER, TARIF, AREA) */
+}
+
+.sidebar-menu-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin: 15px 0 5px;
+  padding-left: 10px;
+  letter-spacing: 1px;
+}
+
+.sidebar-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 18px;             /* JARAK HORIZONTAL ANTARA IKON DAN TEKS */
+  padding: 14px 18px;    /* KETEBALAN TOMBOL MENU */
+  color: var(--text-light);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+/* Memastikan Ikon sejajar lurus */
+.sidebar-menu-link i,
+.sidebar-menu-link img,
+.sidebar-menu-link .icon-box {
+  width: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-menu-link:hover {
+  background: var(--bg-sidebar-hover);
+}
+
+.sidebar-menu-link.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ff6b6b;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* ====================
+    TOPBAR
+==================== */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 260px;
+  right: 0;
+  height: 60px;
+  background: var(--bg-card);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0 25px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  z-index: 900;
+}
+
+.topbar.full {
+  left: 0;
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+}
+
+/* ====================
+    CONTENT
+==================== */
+.content {
+  margin-left: 260px;
+  padding: 90px 30px 30px;
+  transition: var(--transition);
+} 
+
+.content.full {
+  margin-left: 0;
+}
+
+/* ====================
+    MOBILE OPTIMIZATION
+==================== */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 999;
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-260px);
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+
+  .topbar {
+    left: 0;
+  }
+
+  .content {
+    margin-left: 0;
+    padding: 80px 15px 20px;
+  }
+}

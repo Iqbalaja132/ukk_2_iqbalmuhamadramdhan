@@ -1,0 +1,177 @@
+.main-content {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin-left: 260px;
+  transition: all 0.3s ease;
+  padding: 20px;
+  padding-top: 80px;
+  background-color: #f4f6f9;
+  min-height: 100vh;
+}
+
+.sidebar-toggled .main-content {
+  margin-left: 0;
+}
+
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 10px 20px 10px;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* === BUTTON UTAMA === */
+.btn-main {
+  padding: 10px 22px;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-blue {
+  background: #3b82f6;
+}
+
+.btn-blue:hover {
+  background: #2563eb;
+}
+
+/* === TABLE OPTIMIZATION (FIT) === */
+.card-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; /* 🔧 Diubah agar kolom pas dengan isi */
+}
+
+.grid-table th,
+.grid-table td {
+  padding: 12px 15px;
+  border: 1px solid #e5e7eb;
+  text-align: left;
+  white-space: nowrap; /* 🔧 Mencegah teks tertekuk ke bawah */
+}
+
+.grid-table th {
+  background: #eceef0;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* === BADGE === */
+.badge-pill {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.bg-soft-green {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+.bg-soft-red {
+  background: #fef2f2;
+  color: #ef4444;
+}
+.bg-soft-blue {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+/* === BUTTON AKSI === */
+.btn-outline {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-blue {
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+  margin-right: 12px;
+}
+.btn-outline-blue:hover {
+  background: #3b82f6;
+  color: #fff;
+}
+.btn-outline-red {
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+.btn-outline-red:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* === MODAL === */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  width: 420px;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.modal-body label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.modal-body input,
+.modal-body select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  cursor: pointer;
+  font-weight: 600;
+}
