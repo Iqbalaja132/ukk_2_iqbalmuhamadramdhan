@@ -3,93 +3,105 @@ $role = $_SESSION['data']['role'];
 $current = basename($_SERVER['PHP_SELF']);
 ?>
 
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="fixed inset-0 bg-black/50 hidden transition-opacity z-30" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <a href="#" class="sidebar-logo">
-      <div class="sidebar-logo-icon">
+<aside class="fixed left-0 top-0 w-64 h-screen pt-16 overflow-y-auto transition-transform -translate-x-full md:translate-x-0 z-40" id="sidebar" style="background: var(--bg-sidebar); color: var(--text-light);">
+  
+  <div class="px-6 py-8">
+    <a href="#" class="flex items-center gap-3 no-underline">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-lg" style="background: var(--primary);">
         <i class="fas fa-parking"></i>
       </div>
-      <span class="sidebar-logo-text">ParkSmart</span>
+      <span class="text-lg font-bold">ParkSmart</span>
     </a>
   </div>
 
-  <ul class="sidebar-menu">
-    <li class="sidebar-menu-label">Menu Utama</li>
+  <nav class="px-4 space-y-2">
+    <!-- Main Menu Label -->
+    <div class="px-4 py-3 text-xs font-semibold uppercase tracking-wider opacity-60">Menu Utama</div>
 
-    <li>
-      <a href="dashboard.php"
-         class="sidebar-menu-link <?= $current == 'dashboard.php' ? 'active' : '' ?>">
-        <i class="fas fa-th-large"></i> Home
-      </a>
-    </li>
+    <a href="dashboard.php" class="sidebar-menu-link flex items-center gap-3 px-4 py-3 rounded-lg no-underline transition-colors <?= $current == 'dashboard.php' ? 'active' : '' ?>" style="color: var(--text-light);">
+      <i class="fas fa-th-large w-5"></i>
+      <span class="font-medium">Home</span>
+    </a>
 
     <?php if ($role === 'admin'): ?>
-      <li class="sidebar-menu-label">Manajemen</li>
+      <!-- Management Label -->
+      <div class="px-4 py-3 mt-6 text-xs font-semibold uppercase tracking-wider opacity-60">Manajemen</div>
 
-      <li>
-        <a href="user.php"
-           class="sidebar-menu-link <?= $current == 'user.php' ? 'active' : '' ?>">
-          <i class="fas fa-users"></i> User
-        </a>
-      </li>
+      <a href="user.php" class="sidebar-menu-link flex items-center gap-3 px-4 py-3 rounded-lg no-underline transition-colors <?= $current == 'user.php' ? 'active' : '' ?>" style="color: var(--text-light);">
+        <i class="fas fa-users w-5"></i>
+        <span class="font-medium">User</span>
+      </a>
 
-      <li>
-        <a href="tarif.php"
-           class="sidebar-menu-link <?= $current == 'tarif.php' ? 'active' : '' ?>">
-          <i class="fas fa-money-bill-wave"></i> Tarif
-        </a>
-      </li>
+      <a href="tarif.php" class="sidebar-menu-link flex items-center gap-3 px-4 py-3 rounded-lg no-underline transition-colors <?= $current == 'tarif.php' ? 'active' : '' ?>" style="color: var(--text-light);">
+        <i class="fas fa-money-bill-wave w-5"></i>
+        <span class="font-medium">Tarif</span>
+      </a>
 
-      <li>
-        <a href="area_parkir.php"
-           class="sidebar-menu-link <?= $current == 'area_parkir.php' ? 'active' : '' ?>">
-          <i class="fas fa-map-marked-alt"></i> Area
-        </a>
-      </li>
+      <a href="area_parkir.php" class="sidebar-menu-link flex items-center gap-3 px-4 py-3 rounded-lg no-underline transition-colors <?= $current == 'area_parkir.php' ? 'active' : '' ?>" style="color: var(--text-light);">
+        <i class="fas fa-map-marked-alt w-5"></i>
+        <span class="font-medium">Area</span>
+      </a>
 
-      <li>
-        <a href="kendaraan.php"
-           class="sidebar-menu-link <?= $current == 'kendaraan.php' ? 'active' : '' ?>">
-          <i class="fas fa-car"></i> Kendaraan
-        </a>
-      </li>
+      <a href="kendaraan.php" class="sidebar-menu-link flex items-center gap-3 px-4 py-3 rounded-lg no-underline transition-colors <?= $current == 'kendaraan.php' ? 'active' : '' ?>" style="color: var(--text-light);">
+        <i class="fas fa-car w-5"></i>
+        <span class="font-medium">Kendaraan</span>
+      </a>
     <?php endif; ?>
 
     <?php if ($role === 'staff'): ?>
-      <li class="sidebar-menu-label">Operasional</li>
+      <!-- Operational Label -->
+      <div class="px-4 py-3 mt-6 text-xs font-semibold uppercase tracking-wider opacity-60">Operasional</div>
 
-      <li>
-        <a href="struk.php"
-           class="sidebar-menu-link <?= $current == 'struk.php' ? 'active' : '' ?>">
-          <i class="fas fa-receipt"></i> Struk
-        </a>
-      </li>
+      <a href="struk.php" class="sidebar-menu-link flex items-center gap-3 px-4 py-3 rounded-lg no-underline transition-colors <?= $current == 'struk.php' ? 'active' : '' ?>" style="color: var(--text-light);">
+        <i class="fas fa-receipt w-5"></i>
+        <span class="font-medium">Struk</span>
+      </a>
 
-      <li>
-        <a href="transaksi.php"
-           class="sidebar-menu-link <?= $current == 'transaksi.php' ? 'active' : '' ?>">
-          <i class="fas fa-exchange-alt"></i> Transaksi
-        </a>
-      </li>
+      <a href="transaksi.php" class="sidebar-menu-link flex items-center gap-3 px-4 py-3 rounded-lg no-underline transition-colors <?= $current == 'transaksi.php' ? 'active' : '' ?>" style="color: var(--text-light);">
+        <i class="fas fa-exchange-alt w-5"></i>
+        <span class="font-medium">Transaksi</span>
+      </a>
     <?php endif; ?>
 
     <?php if ($role === 'owner'): ?>
-      <li class="sidebar-menu-label">Laporan</li>
+      <!-- Report Label -->
+      <div class="px-4 py-3 mt-6 text-xs font-semibold uppercase tracking-wider opacity-60">Laporan</div>
 
-      <li>
-        <a href="rekap.php"
-           class="sidebar-menu-link <?= $current == 'rekap.php' ? 'active' : '' ?>">
-          <i class="fas fa-file-invoice-dollar"></i> Rekap
-        </a>
-      </li>
+      <a href="rekap.php" class="sidebar-menu-link flex items-center gap-3 px-4 py-3 rounded-lg no-underline transition-colors <?= $current == 'rekap.php' ? 'active' : '' ?>" style="color: var(--text-light);">
+        <i class="fas fa-file-invoice-dollar w-5"></i>
+        <span class="font-medium">Rekap</span>
+      </a>
     <?php endif; ?>
-  </ul>
+  </nav>
 
-  <div class="sidebar-footer">
-    <a href="../../controllers/c_login.php?aksi=logout" class="logout-btn" onclick="return confirm('Yakin hapus data?')">
-      <i class="fas fa-sign-out-alt"></i> Logout
+  <!-- Footer -->
+  <div class="absolute bottom-0 left-0 right-0 p-4 border-t" style="border-color: rgba(255,255,255,.1);">
+    <a href="../../controllers/c_login.php?aksi=logout" class="flex items-center gap-2 px-4 py-2 rounded-lg text-red-400 no-underline transition-colors hover:bg-red-500/10" onclick="return confirm('Yakin ingin logout?')">
+      <i class="fas fa-sign-out-alt"></i>
+      <span class="font-medium">Logout</span>
     </a>
   </div>
 </aside>
+
+<style>
+  .sidebar-menu-link.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  .sidebar-menu-link:hover:not(.active) {
+    background: var(--bg-sidebar-hover) !important;
+  }
+
+  #sidebar {
+    @media (max-width: 768px) {
+      transform: translateX(-100%);
+    }
+  }
+
+  #sidebar.active {
+    transform: translateX(0) !important;
+  }
+</style>
