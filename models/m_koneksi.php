@@ -4,7 +4,7 @@ class koneksi {
     private $server = "localhost";
     private $username = "root";
     private $pass = "";
-    private $db = "ukk_2_iqbalmuhamadramdhan";
+    private $db = "ukk_2_iqbalmuhamadramdhan1";
 
     public $koneksi;
     function __construct()

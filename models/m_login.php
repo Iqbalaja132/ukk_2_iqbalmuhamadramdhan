@@ -8,7 +8,7 @@ class login
   // function registrasi($nama_lengkap, $username, $password, $role, $status_aktif = 1)
   // {
   //   $conn = new koneksi();
-  //   $sql = "INSERT INTO tb_users  VALUES (NULL, '$nama_lengkap', '$username', '$password', '$role', '$status_aktif')";
+  //   $sql = "INSERT INTO tb_user  VALUES (NULL, '$nama_lengkap', '$username', '$password', '$role', '$status_aktif')";
   //   $query = mysqli_query($conn->koneksi, $sql);
 
   //   if ($query) {
@@ -26,7 +26,7 @@ class login
 
  function login($username, $password) {
     $conn = new koneksi();
-    $sql = "SELECT * FROM tb_users WHERE username='$username'";
+    $sql = "SELECT * FROM tb_user WHERE username='$username'";
     $query = mysqli_query($conn->koneksi, $sql);
     $data = mysqli_fetch_assoc($query);
 
