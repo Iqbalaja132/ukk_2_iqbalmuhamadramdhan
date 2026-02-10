@@ -6,27 +6,19 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] !== 'admin') {
     exit;
 }
 
-// Ambil parameter dari URL
 $search = $_GET['search'] ?? '';
 $status_filter = $_GET['status_filter'] ?? '';
 $current_page = $_GET['page'] ?? 1;
 $limit = 10;
 
-// Memanggil controller
 include_once __DIR__ . '/../../controllers/c_areaparkir.php';
 
-// Include header
 include '../templates/header.php';
 ?>
 
-<!-- Main Layout -->
 <div class="flex min-h-screen">
-  <!-- Include sidebar -->
   <?php include '../templates/sidebar.php'; ?>
-
-  <!-- Main Content Area -->
   <div class="flex-1 md:ml-72 pt-2 transition-all duration-300">
-    <!-- Top Navigation Bar -->
     <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-200/50">
       <div class="flex items-center justify-between px-6 py-4">
         <div class="flex items-center space-x-4">
@@ -48,7 +40,6 @@ include '../templates/header.php';
         </div>
       </div>
       
-      <!-- Stats Bar -->
       <div class="px-6 pb-4">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
@@ -107,7 +98,6 @@ include '../templates/header.php';
           </div>
         </div>
         
-        <!-- Progress Bar -->
         <?php if (!empty($total_kapasitas)): ?>
         <div class="mt-4 bg-white rounded-xl p-4 border border-gray-200">
           <div class="flex items-center justify-between mb-2">
@@ -129,11 +119,8 @@ include '../templates/header.php';
       </div>
     </header>
 
-    <!-- Main Content -->
     <main class="p-6">
-      <!-- Table Container -->
       <div class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden animate-fade-in">
-        <!-- Table Header -->
         <div class="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between">
           <div>
             <h2 class="text-lg font-semibold text-gray-800">Daftar Area Parkir</h2>
@@ -141,7 +128,6 @@ include '../templates/header.php';
           </div>
           
           <div class="mt-4 sm:mt-0 flex items-center space-x-3">
-            <!-- Search Form -->
             <form method="GET" action="" class="relative">
               <input type="text" name="search" placeholder="Cari area parkir..." 
                      value="<?= htmlspecialchars($search) ?>"
@@ -153,7 +139,6 @@ include '../templates/header.php';
               <i class="fas fa-search absolute left-4 top-4 text-gray-400"></i>
             </form>
             
-            <!-- Filter Dropdown -->
             <div class="relative">
               <form method="GET" action="" id="filterForm">
                 <input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
@@ -169,7 +154,6 @@ include '../templates/header.php';
               </form>
             </div>
             
-            <!-- Reset Filter -->
             <?php if($search || $status_filter): ?>
             <a href="?page=1" class="p-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-gray-600 hover:text-gray-800">
               <i class="fas fa-redo"></i>
@@ -178,7 +162,6 @@ include '../templates/header.php';
           </div>
         </div>
 
-        <!-- Table -->
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -263,7 +246,7 @@ include '../templates/header.php';
                   <div class="flex items-center justify-center space-x-2">
                     <button onclick="openEdit(
                         '<?= $row->id_area ?>',
-                        '<?= $row->nama_area ?>',
+                        '<?= htmlspecialchars($row->nama_area) ?>',
                         '<?= $row->kapasitas ?>',
                         '<?= $row->terisi ?>'
                     )" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 text-blue-700 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-sm">
@@ -319,7 +302,6 @@ include '../templates/header.php';
           </table>
         </div>
 
-        <!-- Table Footer / Pagination -->
         <?php if (!empty($data_area) && $total_halaman > 1): ?>
         <div class="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between">
           <div class="text-sm text-gray-700 mb-4 sm:mb-0">
@@ -330,25 +312,18 @@ include '../templates/header.php';
             Menampilkan <span class="font-semibold"><?= $start_data ?>-<?= $end_data ?></span> dari <span class="font-semibold"><?= $total_data ?></span> hasil
           </div>
           <div class="flex items-center space-x-2">
-            <!-- Previous Button -->
             <a href="?page=<?= $current_page > 1 ? $current_page - 1 : 1 ?>&search=<?= urlencode($search) ?>&status_filter=<?= urlencode($status_filter) ?>"
                class="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition <?= $current_page <= 1 ? 'opacity-50 cursor-not-allowed' : '' ?>">
               <i class="fas fa-chevron-left text-gray-600"></i>
             </a>
             
-            <!-- Page Numbers -->
             <?php 
-            // Tampilkan maksimal 5 halaman
             $start_page = max(1, $current_page - 2);
             $end_page = min($total_halaman, $current_page + 2);
-            
-            // Jika di awal, tampilkan 5 halaman pertama
             if($start_page <= 2) {
               $start_page = 1;
               $end_page = min(5, $total_halaman);
             }
-            
-            // Jika di akhir, tampilkan 5 halaman terakhir
             if($end_page >= $total_halaman - 1) {
               $start_page = max(1, $total_halaman - 4);
               $end_page = $total_halaman;
@@ -362,7 +337,6 @@ include '../templates/header.php';
             </a>
             <?php endfor; ?>
             
-            <!-- Next Button -->
             <a href="?page=<?= $current_page < $total_halaman ? $current_page + 1 : $total_halaman ?>&search=<?= urlencode($search) ?>&status_filter=<?= urlencode($status_filter) ?>"
                class="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition <?= $current_page >= $total_halaman ? 'opacity-50 cursor-not-allowed' : '' ?>">
               <i class="fas fa-chevron-right text-gray-600"></i>
@@ -375,7 +349,6 @@ include '../templates/header.php';
   </div>
 </div>
 
-<!-- Modal Tambah -->
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 invisible" id="modalTambah">
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform scale-95 transition-all duration-300">
     <div class="relative">
@@ -393,11 +366,11 @@ include '../templates/header.php';
         </div>
       </div>
       
-      <form action="../../controllers/c_areaparkir.php?aksi=tambah" method="post" class="p-6 space-y-6">
+      <form action="../../controllers/c_areaparkir.php?aksi=tambah" method="post" class="p-6 space-y-6" onsubmit="cleanNumberInputs(this)">
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Area Parkir</label>
           <div class="relative">
-            <input type="text" name="nama_area" placeholder="Contoh: Area A, Blok B, Lantai 1" required 
+            <input type="text" name="nama_area" placeholder="Contoh: Gedung A23, Area B, Blok C" required 
                   class="w-full px-4 py-3.5 pl-11 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-gray-50/50">
             <div class="absolute left-3 top-3.5 text-gray-400">
               <i class="fas fa-signature"></i>
@@ -408,8 +381,9 @@ include '../templates/header.php';
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">Kapasitas Maksimal</label>
           <div class="relative">
-            <input type="number" name="kapasitas" id="kapasitasInput" placeholder="Contoh: 100" required min="1" 
-                  class="w-full px-4 py-3.5 pl-11 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-gray-50/50">
+            <input type="number" name="kapasitas" id="kapasitasInput" placeholder="Contoh: 1500" required min="1" 
+                  class="w-full px-4 py-3.5 pl-11 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-gray-50/50" 
+                  oninput="updateProgress()">
             <div class="absolute left-3 top-3.5 text-gray-400">
               <i class="fas fa-car"></i>
             </div>
@@ -422,8 +396,9 @@ include '../templates/header.php';
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">Jumlah Terisi Saat Ini</label>
           <div class="relative">
-            <input type="number" name="terisi" id="terisiInput" placeholder="Contoh: 25" required min="0" 
-                  class="w-full px-4 py-3.5 pl-11 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-gray-50/50">
+            <input type="number" name="terisi" id="terisiInput" placeholder="Contoh: 500" required min="0" 
+                  class="w-full px-4 py-3.5 pl-11 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-gray-50/50" 
+                  oninput="updateProgress()">
             <div class="absolute left-3 top-3.5 text-gray-400">
               <i class="fas fa-motorcycle"></i>
             </div>
@@ -460,7 +435,6 @@ include '../templates/header.php';
   </div>
 </div>
 
-<!-- Modal Edit -->
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 invisible" id="modalEdit">
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform scale-95 transition-all duration-300">
     <div class="relative">
@@ -478,13 +452,13 @@ include '../templates/header.php';
         </div>
       </div>
       
-      <form action="../../controllers/c_areaparkir.php?aksi=update" method="post" class="p-6 space-y-6">
+      <form action="../../controllers/c_areaparkir.php?aksi=update" method="post" class="p-6 space-y-6" onsubmit="cleanNumberInputs(this)">
         <input type="hidden" name="id_area" id="editId">
         
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Area Parkir</label>
           <div class="relative">
-            <input type="text" name="nama_area" id="editNama" placeholder="Contoh: Area A, Blok B, Lantai 1" required 
+            <input type="text" name="nama_area" id="editNama" placeholder="Contoh: Gedung A23, Area B, Blok C" required 
                   class="w-full px-4 py-3.5 pl-11 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-gray-50/50">
             <div class="absolute left-3 top-3.5 text-gray-400">
               <i class="fas fa-signature"></i>
@@ -495,8 +469,9 @@ include '../templates/header.php';
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">Kapasitas Maksimal</label>
           <div class="relative">
-            <input type="number" name="kapasitas" id="editKapasitas" placeholder="Contoh: 100" required min="1" 
-                  class="w-full px-4 py-3.5 pl-11 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-gray-50/50">
+            <input type="number" name="kapasitas" id="editKapasitas" placeholder="Contoh: 1500" required min="1" 
+                  class="w-full px-4 py-3.5 pl-11 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-gray-50/50" 
+                  oninput="updateEditProgress()">
             <div class="absolute left-3 top-3.5 text-gray-400">
               <i class="fas fa-car"></i>
             </div>
@@ -509,8 +484,9 @@ include '../templates/header.php';
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">Jumlah Terisi Saat Ini</label>
           <div class="relative">
-            <input type="number" name="terisi" id="editTerisi" placeholder="Contoh: 25" required min="0" 
-                  class="w-full px-4 py-3.5 pl-11 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-gray-50/50">
+            <input type="number" name="terisi" id="editTerisi" placeholder="Contoh: 500" required min="0" 
+                  class="w-full px-4 py-3.5 pl-11 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-gray-50/50" 
+                  oninput="updateEditProgress()">
             <div class="absolute left-3 top-3.5 text-gray-400">
               <i class="fas fa-motorcycle"></i>
             </div>
@@ -548,7 +524,6 @@ include '../templates/header.php';
 </div>
 
 <script>
-// Sidebar functionality
 let sidebarVisible = false;
 
 function toggleSidebar() {
@@ -568,15 +543,13 @@ function toggleSidebar() {
   sidebarVisible = !sidebarVisible;
 }
 
-// Modal functionality
 function openTambah() { 
   const modal = document.getElementById('modalTambah');
   modal.classList.remove('opacity-0', 'invisible', 'scale-95');
   modal.classList.add('opacity-100', 'visible', 'scale-100');
   
-  // Reset form
   document.querySelector('#modalTambah form').reset();
-  updateProgress('kapasitasInput', 'terisiInput', 'tersisaText', 'progressBar', 'errorText', 'submitBtn');
+  updateProgress();
 }
 
 function openEdit(id, nama, kapasitas, terisi) {
@@ -585,8 +558,7 @@ function openEdit(id, nama, kapasitas, terisi) {
   document.getElementById('editKapasitas').value = kapasitas;
   document.getElementById('editTerisi').value = terisi;
   
-  // Update progress bar
-  updateProgress('editKapasitas', 'editTerisi', 'editTersisaText', 'editProgressBar', 'editErrorText', 'editSubmitBtn');
+  updateEditProgress();
   
   const modal = document.getElementById('modalEdit');
   modal.classList.remove('opacity-0', 'invisible', 'scale-95');
@@ -599,19 +571,16 @@ function closeModal(modalId) {
   modal.classList.add('opacity-0', 'invisible', 'scale-95');
 }
 
-// Update progress bar and validation
-function updateProgress(kapasitasId, terisiId, tersisaId, progressId, errorId, submitId) {
-  const kapasitas = parseInt(document.getElementById(kapasitasId).value) || 0;
-  const terisi = parseInt(document.getElementById(terisiId).value) || 0;
+function updateProgress() {
+  const kapasitas = parseInt(document.getElementById('kapasitasInput').value) || 0;
+  const terisi = parseInt(document.getElementById('terisiInput').value) || 0;
   const tersisa = kapasitas - terisi;
   
-  // Update tersisa text
-  document.getElementById(tersisaId).textContent = tersisa + ' slot';
-  document.getElementById(tersisaId).className = `font-semibold ${tersisa >= 0 ? 'text-green-600' : 'text-red-600'}`;
+  document.getElementById('tersisaText').textContent = tersisa + ' slot';
+  document.getElementById('tersisaText').className = `font-semibold ${tersisa >= 0 ? 'text-green-600' : 'text-red-600'}`;
   
-  // Update progress bar
   const persentase = kapasitas > 0 ? Math.min((terisi / kapasitas) * 100, 100) : 0;
-  const progressBar = document.getElementById(progressId);
+  const progressBar = document.getElementById('progressBar');
   progressBar.style.width = persentase + '%';
   progressBar.className = `h-2 rounded-full ${
     persentase >= 80 ? 'bg-red-500' : 
@@ -619,9 +588,8 @@ function updateProgress(kapasitasId, terisiId, tersisaId, progressId, errorId, s
     'bg-green-500'
   }`;
   
-  // Validate and show/hide error
-  const errorText = document.getElementById(errorId);
-  const submitBtn = document.getElementById(submitId);
+  const errorText = document.getElementById('errorText');
+  const submitBtn = document.getElementById('submitBtn');
   
   if (terisi > kapasitas) {
     errorText.classList.remove('hidden');
@@ -634,7 +602,45 @@ function updateProgress(kapasitasId, terisiId, tersisaId, progressId, errorId, s
   }
 }
 
-// Auto submit search form when typing (with debounce)
+function updateEditProgress() {
+  const kapasitas = parseInt(document.getElementById('editKapasitas').value) || 0;
+  const terisi = parseInt(document.getElementById('editTerisi').value) || 0;
+  const tersisa = kapasitas - terisi;
+  
+  document.getElementById('editTersisaText').textContent = tersisa + ' slot';
+  document.getElementById('editTersisaText').className = `font-semibold ${tersisa >= 0 ? 'text-green-600' : 'text-red-600'}`;
+  
+  const persentase = kapasitas > 0 ? Math.min((terisi / kapasitas) * 100, 100) : 0;
+  const progressBar = document.getElementById('editProgressBar');
+  progressBar.style.width = persentase + '%';
+  progressBar.className = `h-2 rounded-full ${
+    persentase >= 80 ? 'bg-red-500' : 
+    persentase >= 60 ? 'bg-yellow-500' : 
+    'bg-green-500'
+  }`;
+  
+  const errorText = document.getElementById('editErrorText');
+  const submitBtn = document.getElementById('editSubmitBtn');
+  
+  if (terisi > kapasitas) {
+    errorText.classList.remove('hidden');
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+  } else {
+    errorText.classList.add('hidden');
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+  }
+}
+
+function cleanNumberInputs(form) {
+  const numberInputs = form.querySelectorAll('input[type="number"]');
+  numberInputs.forEach(input => {
+    input.value = input.value.replace(/[^\d]/g, '');
+  });
+  return true;
+}
+
 let searchTimeout;
 const searchInput = document.querySelector('input[name="search"]');
 if (searchInput) {
@@ -648,7 +654,6 @@ if (searchInput) {
   });
 }
 
-// Close modals with escape key
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeModal('modalTambah');
@@ -656,18 +661,14 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Close sidebar and modals when clicking overlay
 document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
 
-// Initialize event listeners
 document.addEventListener('DOMContentLoaded', () => {
-  // Add animation classes to table rows
   const tableRows = document.querySelectorAll('tbody tr');
   tableRows.forEach((row, index) => {
     row.style.animationDelay = `${index * 0.05}s`;
   });
   
-  // Auto-hide sidebar on mobile after clicking link
   if (window.innerWidth < 768) {
     document.querySelectorAll('.sidebar a').forEach(link => {
       link.addEventListener('click', () => {
@@ -678,54 +679,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Event listeners for progress bar updates
-  const kapasitasInput = document.getElementById('kapasitasInput');
-  const terisiInput = document.getElementById('terisiInput');
-  const editKapasitas = document.getElementById('editKapasitas');
-  const editTerisi = document.getElementById('editTerisi');
-  
-  if (kapasitasInput && terisiInput) {
-    kapasitasInput.addEventListener('input', () => updateProgress('kapasitasInput', 'terisiInput', 'tersisaText', 'progressBar', 'errorText', 'submitBtn'));
-    terisiInput.addEventListener('input', () => updateProgress('kapasitasInput', 'terisiInput', 'tersisaText', 'progressBar', 'errorText', 'submitBtn'));
-  }
-  
-  if (editKapasitas && editTerisi) {
-    editKapasitas.addEventListener('input', () => updateProgress('editKapasitas', 'editTerisi', 'editTersisaText', 'editProgressBar', 'editErrorText', 'editSubmitBtn'));
-    editTerisi.addEventListener('input', () => updateProgress('editKapasitas', 'editTerisi', 'editTersisaText', 'editProgressBar', 'editErrorText', 'editSubmitBtn'));
-  }
-  
-  // Format angka dengan titik
-  const numberInputs = document.querySelectorAll('input[type="number"]');
-  numberInputs.forEach(input => {
-    // Format saat blur (keluar dari input)
-    input.addEventListener('blur', function() {
-      const value = this.value.replace(/[^\d]/g, '');
-      if (value) {
-        this.value = parseInt(value).toLocaleString('id-ID');
-      }
-    });
-    
-    // Format saat focus (kembali ke angka biasa)
-    input.addEventListener('focus', function() {
-      this.value = this.value.replace(/[^\d]/g, '');
-    });
-    
-    // Saat submit, hapus format titik
-    if (input.closest('form')) {
-      input.closest('form').addEventListener('submit', function() {
-        const numberInputs = this.querySelectorAll('input[type="number"]');
-        numberInputs.forEach(input => {
-          input.value = input.value.replace(/[^\d]/g, '');
-        });
-      });
-    }
-  });
+  updateProgress();
+  updateEditProgress();
 });
-
-// Format angka dengan titik
-function formatNumber(num) {
-  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-}
 </script>
 
 <?php include '../templates/footer.php'; ?>

@@ -10,12 +10,9 @@ $userName = $_SESSION['data']['nama_lengkap'] ?? 'User';
 $userInitial = strtoupper(substr($userName, 0, 1));
 ?>
 
-<!-- Sidebar Overlay -->
 <div class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden transition-opacity duration-300 opacity-0 invisible" id="sidebarOverlay"></div>
 
-<!-- Sidebar -->
 <aside class="fixed top-0 left-0 h-full w-72 gradient-sidebar text-white z-50 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out shadow-2xl" id="sidebar">
-  <!-- Sidebar Header -->
   <div class="p-6 border-b border-white/10">
     <div class="flex items-center space-x-4">
       <div class="relative">
@@ -31,10 +28,8 @@ $userInitial = strtoupper(substr($userName, 0, 1));
     </div>
   </div>
 
-  <!-- Navigation -->
   <div class="flex-1 overflow-y-auto py-4 scrollbar-thin">
     <div class="px-4 space-y-1">
-      <!-- Dashboard -->
       <div class="mb-4">
         <p class="text-xs uppercase tracking-wider text-gray-500 font-semibold px-3 mb-2">Menu Utama</p>
         <a href="dashboard.php" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 <?= $current == 'dashboard.php' ? 'bg-primary-500/20 text-primary-300 border-l-4 border-primary-400' : 'hover:bg-white/5 text-gray-300 hover:text-white' ?>">
@@ -49,7 +44,6 @@ $userInitial = strtoupper(substr($userName, 0, 1));
       </div>
 
       <?php if ($role === 'admin'): ?>
-        <!-- Admin Menu -->
         <div class="mb-4">
           <p class="text-xs uppercase tracking-wider text-gray-500 font-semibold px-3 mb-2">Manajemen</p>
 
@@ -108,7 +102,6 @@ $userInitial = strtoupper(substr($userName, 0, 1));
       <?php endif; ?>
 
       <?php if ($role === 'staff'): ?>
-        <!-- Staff Menu -->
         <div class="mb-4">
           <p class="text-xs uppercase tracking-wider text-gray-500 font-semibold px-3 mb-2">Operasional</p>
 
@@ -129,7 +122,6 @@ $userInitial = strtoupper(substr($userName, 0, 1));
       <?php endif; ?>
 
       <?php if ($role === 'owner'): ?>
-        <!-- Owner Menu -->
         <div class="mb-4">
           <p class="text-xs uppercase tracking-wider text-gray-500 font-semibold px-3 mb-2">Analitik</p>
 
@@ -145,7 +137,6 @@ $userInitial = strtoupper(substr($userName, 0, 1));
     </div>
   </div>
 
-  <!-- Logout Button -->
   <div class="p-6 border-t border-white/10">
     <a href="../../controllers/c_login.php?aksi=logout" onclick="return confirm('Apakah Anda yakin ingin logout?')"
       class="flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-red-500/20 to-red-600/20 hover:from-red-500/30 hover:to-red-600/30 text-red-300 hover:text-white rounded-xl transition-all duration-200 group">

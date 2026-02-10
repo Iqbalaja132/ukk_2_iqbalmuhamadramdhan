@@ -6,27 +6,19 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] !== 'admin') {
     exit;
 }
 
-// Ambil parameter dari URL
 $search = $_GET['search'] ?? '';
 $jenis_filter = $_GET['jenis_filter'] ?? '';
 $current_page = $_GET['page'] ?? 1;
 $limit = 10;
 
-// Memanggil controller
 include_once __DIR__ . '/../../controllers/c_kendaraan.php';
 
-// Include header
 include '../templates/header.php';
 ?>
 
-<!-- Main Layout -->
 <div class="flex min-h-screen">
-  <!-- Include sidebar -->
   <?php include '../templates/sidebar.php'; ?>
-
-  <!-- Main Content Area -->
   <div class="flex-1 md:ml-72 pt-2 transition-all duration-300">
-    <!-- Top Navigation Bar -->
     <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-200/50">
       <div class="flex items-center justify-between px-6 py-4">
         <div class="flex items-center space-x-4">
@@ -48,7 +40,6 @@ include '../templates/header.php';
         </div>
       </div>
       
-      <!-- Stats Bar -->
       <div class="px-6 pb-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
@@ -94,11 +85,8 @@ include '../templates/header.php';
       </div>
     </header>
 
-    <!-- Main Content -->
     <main class="p-6">
-      <!-- Table Container -->
       <div class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden animate-fade-in">
-        <!-- Table Header -->
         <div class="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between">
           <div>
             <h2 class="text-lg font-semibold text-gray-800">Daftar Kendaraan</h2>
@@ -106,7 +94,6 @@ include '../templates/header.php';
           </div>
           
           <div class="mt-4 sm:mt-0 flex items-center space-x-3">
-            <!-- Search Form -->
             <form method="GET" action="" class="relative">
               <input type="text" name="search" placeholder="Cari kendaraan..." 
                      value="<?= htmlspecialchars($search) ?>"
@@ -118,7 +105,6 @@ include '../templates/header.php';
               <i class="fas fa-search absolute left-4 top-4 text-gray-400"></i>
             </form>
             
-            <!-- Filter Dropdown -->
             <div class="relative">
               <form method="GET" action="" id="filterForm">
                 <input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
@@ -134,7 +120,6 @@ include '../templates/header.php';
               </form>
             </div>
             
-            <!-- Reset Filter -->
             <?php if($search || $jenis_filter): ?>
             <a href="?page=1" class="p-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-gray-600 hover:text-gray-800">
               <i class="fas fa-redo"></i>
@@ -143,7 +128,6 @@ include '../templates/header.php';
           </div>
         </div>
 
-        <!-- Table -->
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -202,7 +186,7 @@ include '../templates/header.php';
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900 font-medium"><?= htmlspecialchars($row->pemilik) ?></div>
+                  <div class="text-sm text-gray-900 font-medium"><?= htmlspecialchars(ucfirst(strtolower($row->pemilik))) ?></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
@@ -274,7 +258,6 @@ include '../templates/header.php';
           </table>
         </div>
 
-        <!-- Table Footer / Pagination -->
         <?php if (!empty($data_kendaraan) && $total_halaman > 1): ?>
         <div class="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between">
           <div class="text-sm text-gray-700 mb-4 sm:mb-0">
@@ -285,25 +268,20 @@ include '../templates/header.php';
             Menampilkan <span class="font-semibold"><?= $start_data ?>-<?= $end_data ?></span> dari <span class="font-semibold"><?= $total_data ?></span> hasil
           </div>
           <div class="flex items-center space-x-2">
-            <!-- Previous Button -->
             <a href="?page=<?= $current_page > 1 ? $current_page - 1 : 1 ?>&search=<?= urlencode($search) ?>&jenis_filter=<?= urlencode($jenis_filter) ?>"
                class="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition <?= $current_page <= 1 ? 'opacity-50 cursor-not-allowed' : '' ?>">
               <i class="fas fa-chevron-left text-gray-600"></i>
             </a>
             
-            <!-- Page Numbers -->
             <?php 
-            // Tampilkan maksimal 5 halaman
             $start_page = max(1, $current_page - 2);
             $end_page = min($total_halaman, $current_page + 2);
             
-            // Jika di awal, tampilkan 5 halaman pertama
             if($start_page <= 2) {
               $start_page = 1;
               $end_page = min(5, $total_halaman);
             }
             
-            // Jika di akhir, tampilkan 5 halaman terakhir
             if($end_page >= $total_halaman - 1) {
               $start_page = max(1, $total_halaman - 4);
               $end_page = $total_halaman;
@@ -317,7 +295,6 @@ include '../templates/header.php';
             </a>
             <?php endfor; ?>
             
-            <!-- Next Button -->
             <a href="?page=<?= $current_page < $total_halaman ? $current_page + 1 : $total_halaman ?>&search=<?= urlencode($search) ?>&jenis_filter=<?= urlencode($jenis_filter) ?>"
                class="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition <?= $current_page >= $total_halaman ? 'opacity-50 cursor-not-allowed' : '' ?>">
               <i class="fas fa-chevron-right text-gray-600"></i>
@@ -330,7 +307,6 @@ include '../templates/header.php';
   </div>
 </div>
 
-<!-- Modal Tambah -->
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 invisible" id="modalTambah">
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform scale-95 transition-all duration-300">
     <div class="relative">
@@ -425,7 +401,6 @@ include '../templates/header.php';
   </div>
 </div>
 
-<!-- Modal Edit -->
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 invisible" id="modalEdit">
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform scale-95 transition-all duration-300">
     <div class="relative">
@@ -523,7 +498,6 @@ include '../templates/header.php';
 </div>
 
 <script>
-// Sidebar functionality
 let sidebarVisible = false;
 
 function toggleSidebar() {
@@ -543,7 +517,6 @@ function toggleSidebar() {
   sidebarVisible = !sidebarVisible;
 }
 
-// Modal functionality
 function openTambah() { 
   const modal = document.getElementById('modalTambah');
   modal.classList.remove('opacity-0', 'invisible', 'scale-95');
@@ -573,7 +546,6 @@ function closeModal(modalId) {
   modal.classList.add('opacity-0', 'invisible', 'scale-95');
 }
 
-// Auto submit search form when typing (with debounce)
 let searchTimeout;
 const searchInput = document.querySelector('input[name="search"]');
 if (searchInput) {
@@ -587,7 +559,6 @@ if (searchInput) {
   });
 }
 
-// Close modals with escape key
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeModal('modalTambah');
@@ -595,18 +566,14 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Close sidebar and modals when clicking overlay
 document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
 
-// Initialize animations on page load
 document.addEventListener('DOMContentLoaded', () => {
-  // Add animation classes to table rows
   const tableRows = document.querySelectorAll('tbody tr');
   tableRows.forEach((row, index) => {
     row.style.animationDelay = `${index * 0.05}s`;
   });
   
-  // Auto-hide sidebar on mobile after clicking link
   if (window.innerWidth < 768) {
     document.querySelectorAll('.sidebar a').forEach(link => {
       link.addEventListener('click', () => {
@@ -617,15 +584,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Auto-uppercase for plat nomor inputs
   const platInputs = document.querySelectorAll('input[name="plat_nomor"], input[id="editPlat"]');
   platInputs.forEach(input => {
-    // Format saat mengetik
     input.addEventListener('input', function(e) {
       this.value = this.value.toUpperCase();
     });
     
-    // Format saat paste
     input.addEventListener('paste', function(e) {
       setTimeout(() => {
         this.value = this.value.toUpperCase();
@@ -633,7 +597,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  // Format plat nomor saat modal dibuka
   document.querySelector('input[name="plat_nomor"]')?.addEventListener('focus', function() {
     this.value = this.value.toUpperCase();
   });
@@ -643,7 +606,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Fungsi untuk mengubah input ke uppercase
 function toUpperCaseInput(input) {
   input.value = input.value.toUpperCase();
 }

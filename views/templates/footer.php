@@ -1,5 +1,4 @@
 <script>
-  // Real-time clock
   function updateClock() {
     const now = new Date();
     const options = { 
@@ -17,13 +16,10 @@
     }
   }
   
-  // Update clock every second
   setInterval(updateClock, 1000);
   
-  // Initialize on page load
   document.addEventListener('DOMContentLoaded', updateClock);
   
-  // Toast notification system
   function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     const colors = {
@@ -43,13 +39,11 @@
     
     document.body.appendChild(toast);
     
-    // Animate in
     setTimeout(() => {
       toast.classList.remove('translate-x-full');
       toast.classList.add('translate-x-0');
     }, 10);
     
-    // Remove after 5 seconds
     setTimeout(() => {
       toast.classList.remove('translate-x-0');
       toast.classList.add('translate-x-full');
@@ -57,7 +51,6 @@
     }, 5000);
   }
   
-  // Check for success/error messages in URL
   function checkURLMessages() {
     const urlParams = new URLSearchParams(window.location.search);
     const success = urlParams.get('success');
@@ -71,10 +64,8 @@
     }
   }
   
-  // Check messages on page load
   checkURLMessages();
   
-  // Auto-hide alerts after 5 seconds
   document.querySelectorAll('.alert').forEach(alert => {
     setTimeout(() => {
       alert.style.opacity = '0';

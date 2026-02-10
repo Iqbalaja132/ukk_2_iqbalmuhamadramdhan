@@ -4,9 +4,6 @@ include_once 'm_koneksi.php';
 
 class kendaraan
 {
-  // =========================
-  // TAMPIL DATA SEMUA
-  // =========================
   public function tampil_data()
   {
     $conn = new koneksi();
@@ -19,7 +16,6 @@ class kendaraan
     $hasil = [];
     if ($query) {
       while ($data = mysqli_fetch_object($query)) {
-        // Konversi plat nomor ke huruf kapital saat menampilkan
         $data->plat_nomor = strtoupper($data->plat_nomor);
         $hasil[] = $data;
       }
@@ -27,23 +23,35 @@ class kendaraan
     return $hasil;
   }
 
-  // =========================
-  // TAMPIL DATA DENGAN PAGINATION, SEARCH, DAN FILTER
-  // =========================
+  public function tampil_data_by_id($id)
+  {
+    $conn = new koneksi();
+    $id = mysqli_real_escape_string($conn->koneksi, $id);
+    
+    $sql = "SELECT k.*, u.nama_lengkap
+            FROM tb_kendaraan k
+            JOIN tb_user u ON k.id_user = u.id_user
+            WHERE k.id_kendaraan = '$id'";
+    
+    $query = mysqli_query($conn->koneksi, $sql);
+    
+    if ($query && mysqli_num_rows($query) > 0) {
+      $data = mysqli_fetch_assoc($query);
+      $data['plat_nomor'] = strtoupper($data['plat_nomor']);
+      return $data;
+    }
+    
+    return null;
+  }
+
   public function tampil_data_paginated($search = '', $jenis_filter = '', $page = 1, $limit = 10)
   {
     $conn = new koneksi();
-    
-    // Hitung offset
     $offset = ($page - 1) * $limit;
-    
-    // Build query dengan search dan filter
     $sql = "SELECT k.*, u.nama_lengkap
             FROM tb_kendaraan k
             JOIN tb_user u ON k.id_user = u.id_user
             WHERE 1=1";
-    
-    // Tambahkan kondisi search (konversi search ke uppercase untuk pencarian case-insensitive)
     if (!empty($search)) {
       $search = mysqli_real_escape_string($conn->koneksi, strtoupper($search));
       $sql .= " AND (
@@ -53,8 +61,6 @@ class kendaraan
                 u.nama_lengkap LIKE '%$search%'
               )";
     }
-    
-    // Tambahkan kondisi filter
     if (!empty($jenis_filter)) {
       $jenis_filter = mysqli_real_escape_string($conn->koneksi, $jenis_filter);
       $sql .= " AND k.jenis_kendaraan = '$jenis_filter'";
@@ -68,7 +74,6 @@ class kendaraan
     $hasil = [];
     if ($query) {
       while ($data = mysqli_fetch_object($query)) {
-        // Konversi plat nomor ke huruf kapital
         $data->plat_nomor = strtoupper($data->plat_nomor);
         $hasil[] = $data;
       }
@@ -76,9 +81,6 @@ class kendaraan
     return $hasil;
   }
 
-  // =========================
-  // HITUNG TOTAL DATA UNTUK PAGINATION
-  // =========================
   public function hitung_total_data($search = '', $jenis_filter = '')
   {
     $conn = new koneksi();
@@ -87,8 +89,7 @@ class kendaraan
             FROM tb_kendaraan k
             JOIN tb_user u ON k.id_user = u.id_user
             WHERE 1=1";
-    
-    // Tambahkan kondisi search
+
     if (!empty($search)) {
       $search = mysqli_real_escape_string($conn->koneksi, strtoupper($search));
       $sql .= " AND (
@@ -99,7 +100,6 @@ class kendaraan
               )";
     }
     
-    // Tambahkan kondisi filter
     if (!empty($jenis_filter)) {
       $jenis_filter = mysqli_real_escape_string($conn->koneksi, $jenis_filter);
       $sql .= " AND k.jenis_kendaraan = '$jenis_filter'";
@@ -111,9 +111,6 @@ class kendaraan
     return $result['total'] ?? 0;
   }
 
-  // =========================
-  // HITUNG JUMLAH PER JENIS KENDARAAN
-  // =========================
   public function hitung_jenis_kendaraan($jenis, $search = '', $jenis_filter = '')
   {
     $conn = new koneksi();
@@ -123,7 +120,6 @@ class kendaraan
             JOIN tb_user u ON k.id_user = u.id_user
             WHERE k.jenis_kendaraan = '" . mysqli_real_escape_string($conn->koneksi, $jenis) . "'";
     
-    // Tambahkan kondisi search
     if (!empty($search)) {
       $search = mysqli_real_escape_string($conn->koneksi, strtoupper($search));
       $sql .= " AND (
@@ -134,7 +130,6 @@ class kendaraan
               )";
     }
     
-    // Tambahkan kondisi filter
     if (!empty($jenis_filter)) {
       $jenis_filter = mysqli_real_escape_string($conn->koneksi, $jenis_filter);
       $sql .= " AND k.jenis_kendaraan = '$jenis_filter'";
@@ -146,13 +141,9 @@ class kendaraan
     return $result['total'] ?? 0;
   }
 
-  // =========================
-  // TAMBAH DATA
-  // =========================
   public function tambah_data($plat, $jenis, $warna, $pemilik, $id_user)
   {
     $conn = new koneksi();
-    // Konversi ke uppercase sebelum disimpan
     $plat = mysqli_real_escape_string($conn->koneksi, strtoupper($plat));
     $jenis = mysqli_real_escape_string($conn->koneksi, $jenis);
     $warna = mysqli_real_escape_string($conn->koneksi, $warna);
@@ -173,14 +164,10 @@ class kendaraan
     }
   }
 
-  // =========================
-  // UPDATE DATA
-  // =========================
   public function edit_data($id, $plat, $jenis, $warna, $pemilik, $id_user)
   {
     $conn = new koneksi();
     $id = mysqli_real_escape_string($conn->koneksi, $id);
-    // Konversi ke uppercase sebelum disimpan
     $plat = mysqli_real_escape_string($conn->koneksi, strtoupper($plat));
     $jenis = mysqli_real_escape_string($conn->koneksi, $jenis);
     $warna = mysqli_real_escape_string($conn->koneksi, $warna);
@@ -204,9 +191,6 @@ class kendaraan
     }
   }
 
-  // =========================
-  // HAPUS DATA
-  // =========================
   public function hapus_data($id)
   {
     $conn = new koneksi();

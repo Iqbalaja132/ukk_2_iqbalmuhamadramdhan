@@ -1,8 +1,7 @@
 <?php
 session_start();
 include_once '../models/m_login.php';
-
-$login = new login();
+include_once '../models/m_logaktivitas.php';
 
 if (isset($_GET['aksi'])) { 
 
@@ -11,20 +10,24 @@ if (isset($_GET['aksi'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $login->login($username, $password);
+    $log_model = new logaktivitas();
+    
+    $login = new login();
+    $login->login($username, $password, $log_model);
+    
   } elseif ($_GET['aksi'] == 'logout') {
+
+    if (isset($_SESSION['data'])) {
+      include_once '../models/m_logaktivitas.php';
+      $log_model = new logaktivitas();
+      $user_id = $_SESSION['data']['id_user'];
+      $log_model->tambah_log($user_id, 'User logout dari sistem');
+    }
+    
     session_unset();
     session_destroy();
     header("Location: ../views/login.php");
     exit;
   }
-  // elseif ($_GET['aksi'] == 'registrasi') {
-
-  //   $nama_lengkap = $_POST['nama_lengkap'];
-  //   $username  = $_POST['username'];
-  //   $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-  //   $role = $_POST['role'];
-
-  //   $login->registrasi($nama_lengkap, $username, $password, $role);
-  // }
 }
+?>

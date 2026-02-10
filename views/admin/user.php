@@ -1,19 +1,15 @@
 <?php
 session_start();
 
-// Cek session admin
 if (!isset($_SESSION['data']) || $_SESSION['data']['role'] !== 'admin') {
     header("Location: ../login.php");
     exit;
 }
 
-// Memanggil controller
 include_once __DIR__ . '/../../controllers/c_users.php';
 
-// Include header
 include '../templates/header.php';
 
-// Cek jika variabel belum terdefinisi
 if (!isset($limit)) $limit = 10;
 if (!isset($current_page)) $current_page = 1;
 if (!isset($total_data)) $total_data = 0;
@@ -26,18 +22,13 @@ if (!isset($jumlah_admin)) $jumlah_admin = 0;
 if (!isset($jumlah_petugas)) $jumlah_petugas = 0;
 if (!isset($jumlah_owner)) $jumlah_owner = 0;
 
-// Debug info (opsional)
-$debug_mode = false; // Set true untuk debug
+$debug_mode = false;
 ?>
 
-<!-- Main Layout -->
 <div class="flex min-h-screen">
-  <!-- Include sidebar -->
   <?php include '../templates/sidebar.php'; ?>
 
-  <!-- Main Content Area -->
   <div class="flex-1 md:ml-72 pt-2 transition-all duration-300">
-    <!-- Top Navigation Bar -->
     <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-200/50">
       <div class="flex items-center justify-between px-6 py-4">
         <div class="flex items-center space-x-4">
@@ -59,7 +50,6 @@ $debug_mode = false; // Set true untuk debug
         </div>
       </div>
       
-      <!-- Stats Bar -->
       <div class="px-6 pb-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
@@ -113,9 +103,7 @@ $debug_mode = false; // Set true untuk debug
       </div>
     </header>
 
-    <!-- Main Content -->
     <main class="p-6">
-      <!-- Debug Info (Hapus setelah testing) -->
       <?php if($debug_mode): ?>
       <div class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
         <h3 class="font-bold text-yellow-800 mb-2">Debug Info:</h3>
@@ -130,10 +118,7 @@ $debug_mode = false; // Set true untuk debug
         </div>
       </div>
       <?php endif; ?>
-
-      <!-- Table Container -->
       <div class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden animate-fade-in">
-        <!-- Table Header -->
         <div class="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between">
           <div>
             <h2 class="text-lg font-semibold text-gray-800">Daftar Pengguna</h2>
@@ -141,7 +126,6 @@ $debug_mode = false; // Set true untuk debug
           </div>
           
           <div class="mt-4 sm:mt-0 flex flex-wrap gap-3">
-            <!-- Search Form -->
             <form method="GET" action="" class="relative">
               <input type="text" name="search" placeholder="Cari pengguna..." 
                      value="<?= htmlspecialchars($current_search) ?>"
@@ -156,7 +140,6 @@ $debug_mode = false; // Set true untuk debug
               <i class="fas fa-search absolute left-4 top-4 text-gray-400"></i>
             </form>
             
-            <!-- Role Filter -->
             <div class="relative">
               <form method="GET" action="" id="roleFilterForm">
                 <input type="hidden" name="search" value="<?= htmlspecialchars($current_search) ?>">
@@ -176,7 +159,6 @@ $debug_mode = false; // Set true untuk debug
               </form>
             </div>
             
-            <!-- Status Filter - DIPERBAIKI -->
             <div class="relative">
               <form method="GET" action="" id="statusFilterForm">
                 <input type="hidden" name="search" value="<?= htmlspecialchars($current_search) ?>">
@@ -195,7 +177,6 @@ $debug_mode = false; // Set true untuk debug
               </form>
             </div>
             
-            <!-- Reset Filter -->
             <?php if($current_search || $current_role_filter || $current_status_filter !== ''): ?>
             <a href="?page=1" class="p-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-gray-600 hover:text-gray-800 flex items-center justify-center">
               <i class="fas fa-redo"></i>
@@ -204,7 +185,6 @@ $debug_mode = false; // Set true untuk debug
           </div>
         </div>
 
-        <!-- Table -->
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -333,7 +313,6 @@ $debug_mode = false; // Set true untuk debug
           </table>
         </div>
 
-        <!-- Table Footer / Pagination -->
         <?php if (!empty($data_user) && $total_halaman > 1): ?>
         <div class="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between">
           <div class="text-sm text-gray-700 mb-4 sm:mb-0">
@@ -345,7 +324,6 @@ $debug_mode = false; // Set true untuk debug
             dari <span class="font-semibold"><?= $total_data ?></span> hasil
           </div>
           <div class="flex items-center space-x-2">
-            <!-- Previous Button -->
             <?php if($current_page > 1): ?>
             <a href="?page=<?= $current_page - 1 ?>&search=<?= urlencode($current_search) ?>&role_filter=<?= urlencode($current_role_filter) ?>&status_filter=<?= urlencode($current_status_filter) ?>"
                class="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition">
@@ -357,25 +335,20 @@ $debug_mode = false; // Set true untuk debug
             </span>
             <?php endif; ?>
             
-            <!-- Page Numbers -->
             <?php 
-            // Tampilkan maksimal 5 halaman
             $start_page = max(1, $current_page - 2);
             $end_page = min($total_halaman, $current_page + 2);
             
-            // Jika di awal, tampilkan 5 halaman pertama
             if($start_page <= 2) {
               $start_page = 1;
               $end_page = min(5, $total_halaman);
             }
             
-            // Jika di akhir, tampilkan 5 halaman terakhir
             if($end_page >= $total_halaman - 1) {
               $start_page = max(1, $total_halaman - 4);
               $end_page = $total_halaman;
             }
             
-            // Tampilkan tombol halaman pertama jika tidak ditampilkan
             if($start_page > 1): ?>
             <a href="?page=1&search=<?= urlencode($current_search) ?>&role_filter=<?= urlencode($current_role_filter) ?>&status_filter=<?= urlencode($current_status_filter) ?>"
                class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-300 hover:bg-gray-50 transition font-medium">
@@ -386,7 +359,6 @@ $debug_mode = false; // Set true untuk debug
             <?php endif; ?>
             <?php endif; ?>
             
-            <!-- Halaman yang ditampilkan -->
             <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
             <a href="?page=<?= $i ?>&search=<?= urlencode($current_search) ?>&role_filter=<?= urlencode($current_role_filter) ?>&status_filter=<?= urlencode($current_status_filter) ?>"
                class="w-8 h-8 flex items-center justify-center rounded-lg border <?= $i == $current_page ? 'bg-primary-500 text-white border-primary-500' : 'border-gray-300 hover:bg-gray-50' ?> transition font-medium">
@@ -394,7 +366,6 @@ $debug_mode = false; // Set true untuk debug
             </a>
             <?php endfor; ?>
             
-            <!-- Tampilkan tombol halaman terakhir jika tidak ditampilkan -->
             <?php if($end_page < $total_halaman): ?>
             <?php if($end_page < $total_halaman - 1): ?>
             <span class="w-8 h-8 flex items-center justify-center text-gray-400">...</span>
@@ -405,7 +376,6 @@ $debug_mode = false; // Set true untuk debug
             </a>
             <?php endif; ?>
             
-            <!-- Next Button -->
             <?php if($current_page < $total_halaman): ?>
             <a href="?page=<?= $current_page + 1 ?>&search=<?= urlencode($current_search) ?>&role_filter=<?= urlencode($current_role_filter) ?>&status_filter=<?= urlencode($current_status_filter) ?>"
                class="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition">
@@ -419,7 +389,6 @@ $debug_mode = false; // Set true untuk debug
           </div>
         </div>
         <?php elseif(!empty($data_user) && $total_halaman == 1): ?>
-        <!-- Tampilkan info jika hanya ada 1 halaman -->
         <div class="px-6 py-4 border-t border-gray-200">
           <div class="text-sm text-gray-700">
             Menampilkan semua <span class="font-semibold"><?= $total_data ?></span> hasil
@@ -431,7 +400,6 @@ $debug_mode = false; // Set true untuk debug
   </div>
 </div>
 
-<!-- Modal Tambah -->
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 invisible" id="modalTambah">
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform scale-95 transition-all duration-300">
     <div class="relative">
@@ -553,7 +521,6 @@ $debug_mode = false; // Set true untuk debug
   </div>
 </div>
 
-<!-- Modal Edit -->
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 invisible" id="modalEdit">
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform scale-95 transition-all duration-300">
     <div class="relative">
@@ -678,7 +645,6 @@ $debug_mode = false; // Set true untuk debug
 </div>
 
 <script>
-// Sidebar functionality
 let sidebarVisible = false;
 
 function toggleSidebar() {
@@ -698,13 +664,11 @@ function toggleSidebar() {
   sidebarVisible = !sidebarVisible;
 }
 
-// Modal functionality
 function openTambah() { 
   const modal = document.getElementById('modalTambah');
   modal.classList.remove('opacity-0', 'invisible', 'scale-95');
   modal.classList.add('opacity-100', 'visible', 'scale-100');
   
-  // Reset form
   document.querySelector('#modalTambah form').reset();
 }
 
@@ -714,11 +678,9 @@ function openEdit(id, nama, username, role, status) {
   document.getElementById('editUsername').value = username;
   document.getElementById('editRole').value = role;
   
-  // Reset radio buttons
   document.getElementById('editStatusAktif').checked = false;
   document.getElementById('editStatusNonAktif').checked = false;
   
-  // Set radio button berdasarkan status
   if (status == '1') {
     document.getElementById('editStatusAktif').checked = true;
   } else {
@@ -736,7 +698,6 @@ function closeModal(modalId) {
   modal.classList.add('opacity-0', 'invisible', 'scale-95');
 }
 
-// Password toggle
 function togglePassword(inputId) {
   const input = document.getElementById(inputId);
   const button = input.parentElement.querySelector('button');
@@ -750,12 +711,10 @@ function togglePassword(inputId) {
   }
 }
 
-// Auto uppercase
 function toUpperCaseInput(input) {
   input.value = input.value.toUpperCase();
 }
 
-// Auto submit search form when typing (with debounce)
 let searchTimeout;
 const searchInput = document.querySelector('input[name="search"]');
 if (searchInput) {
@@ -769,7 +728,6 @@ if (searchInput) {
   });
 }
 
-// Close modals with escape key
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeModal('modalTambah');
@@ -777,18 +735,14 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Close sidebar and modals when clicking overlay
 document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
 
-// Initialize animations on page load
 document.addEventListener('DOMContentLoaded', () => {
-  // Add animation classes to table rows
   const tableRows = document.querySelectorAll('tbody tr');
   tableRows.forEach((row, index) => {
     row.style.animationDelay = `${index * 0.05}s`;
   });
   
-  // Auto-hide sidebar on mobile after clicking link
   if (window.innerWidth < 768) {
     document.querySelectorAll('.sidebar a').forEach(link => {
       link.addEventListener('click', () => {
@@ -800,7 +754,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Form validation
 document.querySelector('#modalTambah form')?.addEventListener('submit', function(e) {
   const password = document.getElementById('passwordTambah').value;
   if (password.length < 6) {
@@ -821,7 +774,6 @@ document.querySelector('#modalEdit form')?.addEventListener('submit', function(e
   return true;
 });
 
-// Confirm delete on form submit
 document.querySelectorAll('form[action*="hapus"]').forEach(form => {
   form.addEventListener('submit', function(e) {
     if (!confirm('Yakin ingin menghapus pengguna ini?')) {
