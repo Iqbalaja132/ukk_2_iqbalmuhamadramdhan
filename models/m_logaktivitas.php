@@ -149,11 +149,16 @@ class logaktivitas
 
   public function tambah_log($id_user, $aktivitas)
   {
-    $id_user = mysqli_real_escape_string($this->conn, $id_user);
+    if (empty($id_user) || !is_numeric($id_user)) {
+      $id_user = 'NULL';
+    } else {
+      $id_user = "'" . mysqli_real_escape_string($this->conn, $id_user) . "'";
+    }
+    
     $aktivitas = mysqli_real_escape_string($this->conn, $aktivitas);
     
     $sql = "INSERT INTO tb_log_aktivitas (Id_user, aktivitas, waktu_aktivitas) 
-            VALUES ('$id_user', '$aktivitas', NOW())";
+            VALUES ($id_user, '$aktivitas', NOW())";
     
     return mysqli_query($this->conn, $sql);
   }

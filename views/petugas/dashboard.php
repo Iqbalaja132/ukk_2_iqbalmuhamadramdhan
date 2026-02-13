@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['data']) || $_SESSION['data']['role'] !== 'owner') {
+if (!isset($_SESSION['data']) || $_SESSION['data']['role'] !== 'petugas') {
   header("Location: ../login.php");
   exit;
 }

@@ -101,16 +101,16 @@ $userInitial = strtoupper(substr($userName, 0, 1));
         </div>
       <?php endif; ?>
 
-      <?php if ($role === 'staff'): ?>
+      <?php if ($role === 'petugas'): ?>
         <div class="mb-4">
           <p class="text-xs uppercase tracking-wider text-gray-500 font-semibold px-3 mb-2">Operasional</p>
 
-          <a href="struk.php" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 <?= $current == 'struk.php' ? 'bg-primary-500/20 text-primary-300 border-l-4 border-primary-400' : 'hover:bg-white/5 text-gray-300 hover:text-white' ?>">
+          <!-- <a href="cetak_struk.php" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 <?= $current == 'struk.php' ? 'bg-primary-500/20 text-primary-300 border-l-4 border-primary-400' : 'hover:bg-white/5 text-gray-300 hover:text-white' ?>">
             <div class="w-8 h-8 rounded-lg flex items-center justify-center <?= $current == 'struk.php' ? 'bg-primary-500/20' : 'bg-white/5' ?>">
               <i class="fas fa-receipt text-sm"></i>
             </div>
             <span class="font-medium">Cetak Struk</span>
-          </a>
+          </a> -->
 
           <a href="transaksi.php" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 <?= $current == 'transaksi.php' ? 'bg-primary-500/20 text-primary-300 border-l-4 border-primary-400' : 'hover:bg-white/5 text-gray-300 hover:text-white' ?>">
             <div class="w-8 h-8 rounded-lg flex items-center justify-center <?= $current == 'transaksi.php' ? 'bg-primary-500/20' : 'bg-white/5' ?>">
@@ -130,7 +130,7 @@ $userInitial = strtoupper(substr($userName, 0, 1));
               <i class="fas fa-file-invoice-dollar text-sm"></i>
             </div>
             <span class="font-medium">Laporan</span>
-            <span class="ml-auto text-xs bg-primary-500 text-white px-2 py-1 rounded-full">New</span>
+            <!-- <span class="ml-auto text-xs bg-primary-500 text-white px-2 py-1 rounded-full">New</span> -->
           </a>
         </div>
       <?php endif; ?>
