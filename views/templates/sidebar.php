@@ -132,6 +132,14 @@ $userInitial = strtoupper(substr($userName, 0, 1));
             <span class="font-medium">Laporan</span>
             <!-- <span class="ml-auto text-xs bg-primary-500 text-white px-2 py-1 rounded-full">New</span> -->
           </a>
+
+          <a href="rekap_area.php" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 <?= $current == 'rekap_area.php' ? 'bg-primary-500/20 text-primary-300 border-l-4 border-primary-400' : 'hover:bg-white/5 text-gray-300 hover:text-white' ?>">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center <?= $current == 'rekap_area.php' ? 'bg-primary-500/20' : 'bg-white/5' ?>">
+              <i class="fas fa-file-invoice-dollar text-sm"></i>
+            </div>
+            <span class="font-medium">Area</span>
+            <!-- <span class="ml-auto text-xs bg-primary-500 text-white px-2 py-1 rounded-full">New</span> -->
+          </a>
         </div>
       <?php endif; ?>
     </div>

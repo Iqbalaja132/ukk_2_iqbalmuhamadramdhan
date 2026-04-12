@@ -4,24 +4,24 @@ include_once 'm_koneksi.php';
 
 class login
 {
-  // function registrasi($nama_lengkap, $username, $password, $role, $status_aktif = 1)
-  // {
-  //   $conn = new koneksi();
-  //   $sql = "INSERT INTO tb_user  VALUES (NULL, '$nama_lengkap', '$username', '$password', '$role', '$status_aktif')";
-  //   $query = mysqli_query($conn->koneksi, $sql);
+  function registrasi($nama_lengkap, $username, $password, $role, $status_aktif = 1)
+  {
+    $conn = new koneksi();
+    $sql = "INSERT INTO tb_user  VALUES (NULL, '$nama_lengkap', '$username', '$password', '$role', '$status_aktif')";
+    $query = mysqli_query($conn->koneksi, $sql);
 
-  //   if ($query) {
-  //     echo "<script>
-  //               alert('Registrasi berhasil');
-  //               window.location='../views/login.php';
-  //             </script>";
-  //   } else {
-  //     echo "<script>
-  //               alert('Registrasi gagal');
-  //               window.location='../views/registrasi.php';
-  //             </script>";
-  //   }
-  // }
+    if ($query) {
+      echo "<script>
+                alert('Registrasi berhasil');
+                window.location='../views/login.php';
+              </script>"; 
+    } else {
+      echo "<script>
+                alert('Registrasi gagal');
+                window.location='../views/registrasi.php';
+              </script>";
+    }
+  }
 
   function login($username, $password, $log_model = null) {
     $conn = new koneksi();

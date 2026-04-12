@@ -28,6 +28,15 @@ if (isset($_GET['aksi'])) {
     session_destroy();
     header("Location: ../views/login.php");
     exit;
+  } elseif ($_GET['aksi']  == 'regis') {
+    $nama_lengkap = $_POST['nama_lengkap'];    
+    $username = $_POST['username'];    
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    
+    $role = $_POST['role'];
+    $status = $_POST['status'];
+
+    $login = new login();
+    $login->registrasi($nama_lengkap, $username, $password, $role, $status_aktif = 1);
   }
 }
 ?>
