@@ -177,9 +177,10 @@ class kendaraan
         $query = mysqli_query($this->conn, $sql);
 
         if ($query) {
-            return mysqli_insert_id($this->conn);
+            header("Location: ../views/admin/kendaraan.php");
+            exit;
         } else {
-            return false;
+            echo "<script>alert('Data gagal ditambahkan');history.back()</script>";
         }
     }
 
@@ -209,17 +210,43 @@ class kendaraan
         }
     }
 
-    public function hapus_data($id)
-    {
-        $id = mysqli_real_escape_string($this->conn, $id);
-        
-        mysqli_query(
-            $this->conn,
-            "DELETE FROM tb_kendaraan WHERE id_kendaraan='$id'"
-        );
+public function hapus_data($id)
+{
+    $id = mysqli_real_escape_string($this->conn, $id);
 
-        header("Location: ../views/admin/kendaraan.php");
+    // 1. Cek apakah kendaraan masih terparkir
+    $cek = mysqli_query(
+        $this->conn,
+        "SELECT * FROM tb_transaksi 
+         WHERE id_kendaraan = '$id' 
+         AND waktu_keluar IS NULL"
+    );
+
+    if (mysqli_num_rows($cek) > 0) {
+        // Jika masih parkir, tidak boleh dihapus
+        echo "<script>
+                alert('Kendaraan masih terparkir, tidak bisa dihapus!');
+                history.back();
+              </script>";
         exit;
     }
+
+    // 2. Jika tidak parkir, baru boleh dihapus
+    $hapus = mysqli_query(
+        $this->conn,
+        "DELETE FROM tb_kendaraan 
+         WHERE id_kendaraan='$id'"
+    );
+
+    if ($hapus) {
+        header("Location: ../views/admin/kendaraan.php");
+        exit;
+    } else {
+        echo "<script>
+                alert('Data gagal dihapus');
+                history.back();
+              </script>";
+    }
+}
 }
 ?>

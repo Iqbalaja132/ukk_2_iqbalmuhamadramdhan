@@ -260,17 +260,49 @@ class area
         }
     }
 
-    public function hapus_data($id_area)
-    {
-        $id_area = mysqli_real_escape_string($this->conn, $id_area);
-        
-        mysqli_query(
-            $this->conn,
-            "DELETE FROM tb_area_parkir WHERE id_area='$id_area'"
-        );
+public function hapus_data($id_area)
+{
+    $id_area = mysqli_real_escape_string($this->conn, $id_area);
 
+    // Cek apakah area ada
+    $cek_sql = "SELECT terisi FROM tb_area_parkir WHERE id_area = '$id_area'";
+    $cek_query = mysqli_query($this->conn, $cek_sql);
+
+    if (mysqli_num_rows($cek_query) == 0) {
+        echo "<script>
+                alert('Area parkir tidak ditemukan!');
+                history.back();
+              </script>";
+        return false;
+    }
+
+    // Ambil jumlah terisi
+    $data = mysqli_fetch_assoc($cek_query);
+    $terisi = $data['terisi'];
+
+    // Jika masih ada kendaraan
+    if ($terisi > 0) {
+        echo "<script>
+                alert('Area tidak dapat dihapus karena masih terisi kendaraan!');
+                history.back();
+              </script>";
+        return false;
+    }
+
+    // Jika kosong baru boleh hapus
+    $sql = "DELETE FROM tb_area_parkir WHERE id_area='$id_area'";
+    $query = mysqli_query($this->conn, $sql);
+
+    if ($query) {
         header("Location: ../views/admin/area_parkir.php");
         exit;
+    } else {
+        echo "<script>
+                alert('Gagal menghapus area parkir!');
+                history.back();
+              </script>";
+        return false;
     }
+}
 }
 ?>

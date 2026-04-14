@@ -215,25 +215,45 @@ class user
     }
   }
 
-  public function hapus_data($id_user)
-  {
+public function hapus_data($id_user)
+{
     $id_user = mysqli_real_escape_string($this->conn, $id_user);
-    
+
+    // Cegah hapus akun yang sedang login
     if (session_status() === PHP_SESSION_ACTIVE) {
         if (isset($_SESSION['data']['id_user']) && $_SESSION['data']['id_user'] == $id_user) {
             echo "<script>alert('Tidak dapat menghapus akun yang sedang login!');history.back()</script>";
             return false;
         }
     }
-    
-    $check_sql = "SELECT * FROM tb_user WHERE id_user = '$id_user'";
+
+    // Cek apakah user ada
+    $check_sql = "SELECT role FROM tb_user WHERE id_user = '$id_user'";
     $check_query = mysqli_query($this->conn, $check_sql);
-    
+
     if (mysqli_num_rows($check_query) == 0) {
         echo "<script>alert('User tidak ditemukan!');history.back()</script>";
         return false;
     }
-    
+
+    // Ambil role user
+    $data_user = mysqli_fetch_assoc($check_query);
+    $role = $data_user['role'];
+
+    // Hitung jumlah user berdasarkan role
+    $count_sql = "SELECT COUNT(*) as total FROM tb_user WHERE role = '$role'";
+    $count_query = mysqli_query($this->conn, $count_sql);
+    $count_data = mysqli_fetch_assoc($count_query);
+
+    if ($count_data['total'] <= 1) {
+        echo "<script>
+            alert('User dengan role $role tidak dapat dihapus karena hanya tersisa 1!');
+            history.back();
+        </script>";
+        return false;
+    }
+
+    // Jika lebih dari 1, baru boleh hapus
     $sql = "DELETE FROM tb_user WHERE id_user='$id_user'";
     $query = mysqli_query($this->conn, $sql);
 
@@ -247,5 +267,5 @@ class user
         echo "<script>alert('Gagal menghapus user');history.back()</script>";
         return false;
     }
-  }
+}
 }

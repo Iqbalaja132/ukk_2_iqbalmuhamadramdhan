@@ -112,7 +112,7 @@ class logaktivitas
     $today = date('Y-m-d');
     $sql = "SELECT COUNT(DISTINCT Id_user) as total
             FROM tb_log_aktivitas 
-            WHERE DATE(waktu_aktivitas) = '$today'";
+            WHERE DATE(waktu_aktivitas) = '$today' AND Id_user IS NOT NULL";
     
     $query = mysqli_query($this->conn, $sql);
     
@@ -147,20 +147,41 @@ class logaktivitas
     return $this->tampil_data_paginated('', '', '', 1, 1000);
   }
 
+  /**
+   * Menambahkan log aktivitas
+   * @param int|null $id_user ID user (bisa null untuk guest/unauthenticated)
+   * @param string $aktivitas Deskripsi aktivitas
+   * @return bool
+   */
   public function tambah_log($id_user, $aktivitas)
   {
-    if (empty($id_user) || !is_numeric($id_user)) {
-      $id_user = 'NULL';
+    // Perbaikan: Handle parameter id_user dengan benar
+    if ($id_user === null || $id_user === 'NULL' || $id_user === '' || !is_numeric($id_user)) {
+      // Gunakan NULL untuk user yang tidak terautentikasi
+      $id_user_sql = "NULL";
     } else {
-      $id_user = "'" . mysqli_real_escape_string($this->conn, $id_user) . "'";
+      $id_user_sql = "'" . mysqli_real_escape_string($this->conn, $id_user) . "'";
     }
     
     $aktivitas = mysqli_real_escape_string($this->conn, $aktivitas);
     
     $sql = "INSERT INTO tb_log_aktivitas (Id_user, aktivitas, waktu_aktivitas) 
-            VALUES ($id_user, '$aktivitas', NOW())";
+            VALUES ($id_user_sql, '$aktivitas', NOW())";
+    
+    // Debug: log query jika perlu
+    // error_log("SQL Log: " . $sql);
     
     return mysqli_query($this->conn, $sql);
+  }
+
+  /**
+   * Menambahkan log untuk guest (tanpa user ID)
+   * @param string $aktivitas Deskripsi aktivitas
+   * @return bool
+   */
+  public function tambah_log_guest($aktivitas)
+  {
+    return $this->tambah_log(null, $aktivitas);
   }
 
   public function export_csv($search = '', $date_filter = '', $user_filter = '')
